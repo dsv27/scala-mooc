@@ -1,3 +1,7 @@
-/.idea/
-/target/
-/project/target/
+.idea/
+target/
+project/target/
+.vscode
+.metals
+.bsp
+.scalafmt.conf
