@@ -27,16 +27,16 @@ object task_seq_riddle {
     @tailrec
     def loop(acc: List[Int], l: List[Int]): List[Int] = l match {
       case Nil => acc
-      case thisList @ (head :: _) =>
+      case currentList @ (head :: _) =>
         val tmpList =
-          thisList.takeWhile(_ == head) //выбираем записи до последнего head
+          currentList.takeWhile(_ == head) //выбираем записи до последнего head
         val resultList = List(
           tmpList.size,
           head
         ) // создаем промежуточный результирующий список, из 2 элементов head = длина непрерывной последовательности, tail значение эдемента
         loop(
-          acc ::: resultList,
-          thisList.dropWhile(_ == head)
+          acc ++ resultList,
+          currentList.dropWhile(_ == head)
         ) // добавляем в глову аккумулятора результирующий список, передаем в обработку откушеный хвост
     }
 

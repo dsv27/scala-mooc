@@ -5,7 +5,7 @@ import scala.annotation.tailrec
 
 object task_caesar {
 
-  val abcd = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  val abcd = 'A' to 'Z'
 
   /** В данном задании Вам предлагается реализовать функции,
     * реализующие кодирование/декодирование строки шифром Цезаря.
@@ -19,21 +19,17 @@ object task_caesar {
     * @return зашифрованное слово
     */
 
-  def encrypt(word: String, offset: Int): String = {
-    word match {
-      case "" => ""
-      case x => {
-        x.map(x => {
-          val i: Int = abcd.indexOf(x) + offsetAbcd(offset)
-          i match {
-            case x if x < abcd.length()  => abcd(i)
-            case x if x >= abcd.length() => abcd(i - abcd.length())
-          }
-        })
-      }
-    }
-  }
-// Можно через % , но упражнения на рекурсию :)
+  def encrypt(word: String, offset: Int): String =
+    word.map(x => locateAbcd(abcd.indexOf(x) + offsetAbcd(offset)))
+
+  /** @param cipher шифр, который необходимо расшифровать
+    * @param offset сдвиг вперёд по алфавиту
+    * @return расшифрованное слово
+    */
+  def decrypt(cipher: String, offset: Int): String =
+    cipher.map(x => locateAbcd(abcd.indexOf(x) - offsetAbcd(offset)))
+
+  // Можно через % , но упражнения на рекурсию :)
   def offsetAbcd(offset: Int, abcdLen: Int = abcd.length()): Int = {
     @tailrec
     def loop(offset: Int, abcdLen: Int): Int = {
@@ -44,24 +40,11 @@ object task_caesar {
     }
     loop(offset, abcdLen)
   }
-
-  /** @param cipher шифр, который необходимо расшифровать
-    * @param offset сдвиг вперёд по алфавиту
-    * @return расшифрованное слово
-    */
-  def decrypt(cipher: String, offset: Int): String = {
-    cipher match {
-      case "" => ""
-      case x => {
-        x.map(x => {
-          val i: Int = abcd.indexOf(x) - offsetAbcd(offset)
-          i match {
-            case x if x >= 0 && x < abcd.length()  => abcd(i)
-            case x if x < 0 => abcd(abcd.length() + i)
-          }
-        })
-      }
+  def locateAbcd(offset: Int): Char = {
+    offset match {
+      case x if x < 0                       => abcd(offset + abcd.length())
+      case x if x >= 0 && x < abcd.length() => abcd(offset)
+      case x if x >= abcd.length()          => abcd(offset - abcd.length())
     }
   }
-
 }
